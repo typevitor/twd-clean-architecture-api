@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  api:
+    container_name: twd-api
+    build: .
+    image: twd-api
+    restart: always
+    volumes:
+      - ./:/usr/src/twd-api/
