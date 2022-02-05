@@ -45,4 +45,19 @@ describe('Email Validation', () => {
     const email: string = 'any@' + 'd'.repeat(64) + '.' + 'com'
     expect(Email.validate(email)).toBeFalsy()
   })
+
+  test('Should return false if email localpart has two dots', () => {
+    const email: string = 'any..email@domain.com'
+    expect(Email.validate(email)).toBeFalsy()
+  })
+
+  test('Should return false if email localpart ends with dot', () => {
+    const email: string = 'any.@domain.com'
+    expect(Email.validate(email)).toBeFalsy()
+  })
+
+  test('Should return false if email has no at-sign', () => {
+    const email: string = 'anydomain.com'
+    expect(Email.validate(email)).toBeFalsy()
+  })
 })
