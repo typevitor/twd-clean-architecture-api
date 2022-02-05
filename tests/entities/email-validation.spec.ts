@@ -45,9 +45,4 @@ describe('Email Validation', () => {
     const email: string = 'any@' + 'd'.repeat(64) + '.' + 'com'
     expect(Email.validate(email)).toBeFalsy()
   })
-
-  test('Should return false if localpart has an invalid chart', () => {
-    const email: string = 'any email@main.com'
-    expect(Email.validate(email)).toBeFalsy()
-  })
 })
