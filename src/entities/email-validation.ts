@@ -7,8 +7,8 @@ export class Email {
       return false
     }
     const [localpart, domain] = email.split('@')
-    console.log(domain)
     if (localpart.length > 64) return false
+    if (domain.length > 255) return false
     return true
   }
 }
