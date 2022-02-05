@@ -26,6 +26,11 @@ describe('Email Validation', () => {
     expect(Email.validate(email)).toBeFalsy()
   })
 
+  test('Should return false if domain is empty', () => {
+    const email: string = 'invalid_email@'
+    expect(Email.validate(email)).toBeFalsy()
+  })
+
   test('Should return false if domain is larger than 255 chars', () => {
     const email: string = 'valid_email@' + 'd'.repeat(255) + '.com'
     expect(Email.validate(email)).toBeFalsy()
