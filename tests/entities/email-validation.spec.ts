@@ -21,6 +21,11 @@ describe('Email Validation', () => {
     expect(Email.validate(email)).toBeFalsy()
   })
 
+  test('Should return false if domain is larger than 255 chars', () => {
+    const email: string = 'valid_email@' + 'd'.repeat(255) + '.com'
+    expect(Email.validate(email)).toBeFalsy()
+  })
+
   test('Should return false if email is larger than 320 chars', () => {
     const email: string = 'a'.repeat(64) + '@' + 'd'.repeat(255) + '.com'
     expect(Email.validate(email)).toBeFalsy()
