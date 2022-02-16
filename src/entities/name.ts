@@ -19,5 +19,6 @@ export class Name {
     if (!name) return false
     if (name.trim().length <= 2) return false
     if (name.trim().length > 100) return false
+    return true
   }
 }
