@@ -1,12 +1,11 @@
 import { User } from '@/entities/user'
-import { left } from '@/shared/either'
-import { InvalidEmailError } from '@/entities/errors'
 
 describe('User domain entity', () => {
   test('Should not create user with an invalid e-mail address', () => {
     const invalidEmail = 'invalid_emailmail.com'
-    const userOrError = User.create({ name: 'any_name', email: invalidEmail })
-    expect(userOrError).toEqual(left(new InvalidEmailError()))
+    const error = User.create({ name: 'any_name', email: invalidEmail }).value as Error
+    expect(error.name).toBe('InvalidEmailError')
+    expect(error.message).toEqual('Invalid email :' + invalidEmail)
   })
 
   test('Should create user with valid Data', () => {
