@@ -1,8 +1,6 @@
 import { Either, left, right } from '@/shared/either'
-import { InvalidEmailError, InvalidNameError } from './errors'
-import { UserData } from './user-data'
-import { Email } from './email'
-import { Name } from './name'
+import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
+import { UserData, Name, Email } from '@/entities'
 
 type InvalidUserError = InvalidNameError | InvalidEmailError;
 export class User {

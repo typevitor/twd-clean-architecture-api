@@ -1,6 +1,5 @@
 import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
-import { User } from '@/entities/user'
-import { UserData } from '@/entities/user-data'
+import { User, UserData } from '@/entities'
 import { Either, left, right } from '@/shared/either'
 import { UserRepository } from './ports/user-repository'
 
