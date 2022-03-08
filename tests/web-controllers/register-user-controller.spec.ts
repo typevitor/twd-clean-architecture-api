@@ -33,58 +33,58 @@ describe('Register user web controller', () => {
   })
 
   test('should return status code 400 when request contains invalid user name', async () => {
-    const request: HttpRequest = {
+    const requestWithInvalidName: HttpRequest = {
       body: {
         name: 'a',
         email: 'any@mail.com'
       }
     }
-    const response: HttpResponse = await controller.handle(request)
+    const response: HttpResponse = await controller.handle(requestWithInvalidName)
     expect(response.statusCode).toBe(400)
     expect(response.body).toBeInstanceOf(InvalidNameError)
   })
 
   test('should return status code 400 when request contains invalid email', async () => {
-    const request: HttpRequest = {
+    const requestWithInvalidEmail: HttpRequest = {
       body: {
         name: 'Any name',
         email: 'invalidmail.@mail.com'
       }
     }
-    const response: HttpResponse = await controller.handle(request)
+    const response: HttpResponse = await controller.handle(requestWithInvalidEmail)
     expect(response.statusCode).toBe(400)
     expect(response.body).toBeInstanceOf(InvalidEmailError)
   })
 
   test('should return status code 400 when request is missing user name', async () => {
-    const request: HttpRequest = {
+    const requestWithMissingName: HttpRequest = {
       body: {
         email: 'invalidmail.@mail.com'
       }
     }
-    const response: HttpResponse = await controller.handle(request)
+    const response: HttpResponse = await controller.handle(requestWithMissingName)
     expect(response.statusCode).toBe(400)
     expect(response.body).toBeInstanceOf(MissingParamError)
     expect((response.body as Error).message).toEqual('Missing parameter from request: name.')
   })
 
   test('should return status code 400 when request is missing email', async () => {
-    const request: HttpRequest = {
+    const requestWithMissingEmail: HttpRequest = {
       body: {
         name: 'Any name'
       }
     }
-    const response: HttpResponse = await controller.handle(request)
+    const response: HttpResponse = await controller.handle(requestWithMissingEmail)
     expect(response.statusCode).toBe(400)
     expect(response.body).toBeInstanceOf(MissingParamError)
     expect((response.body as Error).message).toEqual('Missing parameter from request: email.')
   })
 
   test('should return status code 400 when request is missing name and email', async () => {
-    const request: HttpRequest = {
+    const requestWithMissingUserData: HttpRequest = {
       body: {}
     }
-    const response: HttpResponse = await controller.handle(request)
+    const response: HttpResponse = await controller.handle(requestWithMissingUserData)
     expect(response.statusCode).toBe(400)
     expect(response.body).toBeInstanceOf(MissingParamError)
     expect((response.body as Error).message).toEqual('Missing parameter from request: name email.')
