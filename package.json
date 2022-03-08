@@ -29,5 +29,9 @@
     "test-integration": "npm test -- --watch -c jest-integration.config.js",
     "test-staged": "npm test -- --findRelatedTests",
     "test-ci": "npm test -- --coverage"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "express": "^4.17.3"
   }
 }
