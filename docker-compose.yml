@@ -7,3 +7,5 @@ services:
     restart: always
     volumes:
       - ./:/usr/src/twd-api/
+    ports:
+      - "3000:3000"
