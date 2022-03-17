@@ -1,8 +1,8 @@
 version: "3.9"
 services:
   mongo:
-    container_name: mongo-container
-    image: mongo
+    container_name: mongo5
+    image: mongo:5.0.5
     restart: always
     volumes:
       - ./data:/data/db
