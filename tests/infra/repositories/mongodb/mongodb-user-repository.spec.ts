@@ -25,4 +25,19 @@ describe('MongoDB User Repository', () => {
     await userRepository.add(userData)
     expect((await userRepository.exists(userData))).toBeTruthy()
   })
+
+  test('should return all added users when findAll is called', async () => {
+    const userRepository = new MongoDbUserRepository()
+    await userRepository.add({
+      name: 'Any Name',
+      email: 'any@email.com'
+    })
+    await userRepository.add({
+      name: 'Other Name',
+      email: 'other@email.com'
+    })
+    const users = await userRepository.findAllUsers()
+    expect(users[0].name).toBe('Any Name')
+    expect(users[1].name).toBe('Other Name')
+  })
 })
