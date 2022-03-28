@@ -1,7 +1,9 @@
-import { Either, Left, Right, right } from '@/shared/either'
+import { Either, left, Left, Right, right } from '@/shared/either'
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service'
 import { MailServiceError } from '@/usecases/errors/mail-service-error'
 import { SendEmailUseCase } from '@/usecases/send-email'
+import { SendMailError } from '../errors/send-mail-error'
+import { InvalidEmailError } from '@/entities/errors'
 
 const attachmentFilepath = '../resources/text.txt'
 const fromName = 'fromName'
@@ -30,8 +32,13 @@ const mailOptions: EmailOptions = {
 }
 
 class MailServiceStub implements EmailService {
-  async send (emailOptions: EmailOptions): Promise<Either<MailServiceError, EmailOptions>> {
+  async send (emailOptions: EmailOptions): Promise<Either<SendMailError, EmailOptions>> {
     return right(emailOptions)
+  }
+}
+class MailServiceWithErrorStub implements EmailService {
+  async send (emailOptions: EmailOptions): Promise<Either<SendMailError, EmailOptions>> {
+    return left(new MailServiceError())
   }
 }
 
@@ -54,5 +61,16 @@ describe('Send Email to User', () => {
       email: 'invalid_email'
     })
     expect(response).toBeInstanceOf(Left)
+    expect(response.value).toBeInstanceOf(InvalidEmailError)
+  })
+
+  test('should return error when email service fails', async () => {
+    const mailServiceWithErrorStub = new MailServiceWithErrorStub()
+    const useCase = new SendEmailUseCase(mailOptions, mailServiceWithErrorStub)
+    const response = await useCase.perform({
+      name: toName,
+      email: toEmail
+    })
+    expect(response.value).toBeInstanceOf(MailServiceError)
   })
 })
