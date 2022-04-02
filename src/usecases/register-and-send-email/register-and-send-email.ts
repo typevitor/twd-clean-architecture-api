@@ -20,8 +20,9 @@ export class RegisterAndSendEmailUseCase implements UseCase {
     if (userOrError.isLeft()) {
       return left(userOrError.value)
     }
-    await this.registerUser.perform(userData)
-    const sendEmailOrError = await this.sendMail.perform(userData)
+    const user = userOrError.value as User
+    await this.registerUser.perform(user)
+    const sendEmailOrError = await this.sendMail.perform(user)
     if (sendEmailOrError.isLeft()) {
       return left(sendEmailOrError.value)
     }
