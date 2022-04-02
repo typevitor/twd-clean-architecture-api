@@ -1,1 +1,1 @@
-export * from './register-user-controller'
+export * from './register-user-and-send-email-controller'
