@@ -7,7 +7,6 @@ import { SendMailError } from '@/usecases/errors/send-mail-error'
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service'
 import { SendEmailUseCase } from '@/usecases/send-email'
 import { RegisterAndSendEmailUseCase } from '@/usecases/register-and-send-email'
-import { User } from '@/entities'
 
 describe('Register and send email Use Case', () => {
   const attachmentFilepath = '../resources/text.txt'
@@ -43,7 +42,7 @@ describe('Register and send email Use Case', () => {
       return right(emailOptions)
     }
   }
-  test('should add user to mailing list and send email', async () => {
+  test('should register user and send email with valid data', async () => {
     const users: UserData[] = []
     const userRepo: UserRepository = new InMemoryUserRepository(users)
     const registerUserUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepo)
@@ -55,14 +54,14 @@ describe('Register and send email Use Case', () => {
     )
     const name = 'any_name'
     const email = 'any_email@email.com'
-    const response = (await registerAndSendEmailUseCase.perform({ name, email })).value as User
+    const response: UserData = (await registerAndSendEmailUseCase.perform({ name, email })).value as UserData
     const user = userRepo.findUserByEmail('any_email@email.com')
     expect((await user).name).toBe('any_name')
-    expect(response.name.value).toBe('any_name')
+    expect(response.name).toBe('any_name')
     expect(mailServiceMock.numberOfCalls).toBe(1)
   })
 
-  test('should not add user with and invalid_email', async () => {
+  test('should not register user and send email with an invalid email', async () => {
     const users: UserData[] = []
     const userRepo: UserRepository = new InMemoryUserRepository(users)
     const registerUserUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepo)
@@ -78,7 +77,7 @@ describe('Register and send email Use Case', () => {
     expect(response.name).toEqual('InvalidEmailError')
   })
 
-  test('should not add user with and invalid name', async () => {
+  test('should not register user and send email with and invalid name', async () => {
     const users: UserData[] = []
     const userRepo: UserRepository = new InMemoryUserRepository(users)
     const registerUserUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepo)

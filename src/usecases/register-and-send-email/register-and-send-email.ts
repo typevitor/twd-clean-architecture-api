@@ -15,7 +15,7 @@ export class RegisterAndSendEmailUseCase implements UseCase {
     this.sendMail = sendMail
   }
 
-  async perform (userData: UserData): Promise<Either<SendMailError, User>> {
+  async perform (userData: UserData): Promise<Either<SendMailError, UserData>> {
     const userOrError: Either<InvalidNameError | InvalidEmailError, User> = User.create(userData)
     if (userOrError.isLeft()) {
       return left(userOrError.value)
@@ -26,6 +26,6 @@ export class RegisterAndSendEmailUseCase implements UseCase {
     if (sendEmailOrError.isLeft()) {
       return left(sendEmailOrError.value)
     }
-    return right(userOrError.value)
+    return right({ name: user.name.value, email: user.email.value })
   }
 }
