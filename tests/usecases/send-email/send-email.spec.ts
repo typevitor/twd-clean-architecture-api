@@ -1,9 +1,9 @@
-import { Either, left, Left, Right, right } from '@/shared/either'
+import { Either, left, right } from '@/shared/either'
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service'
 import { MailServiceError } from '@/usecases/errors/mail-service-error'
 import { SendEmailUseCase } from '@/usecases/send-email'
 import { SendMailError } from '../errors/send-mail-error'
-import { InvalidEmailError } from '@/entities/errors'
+import { User } from '@/entities'
 
 const attachmentFilepath = '../resources/text.txt'
 const fromName = 'fromName'
@@ -46,31 +46,22 @@ describe('Send Email to User', () => {
   test('should send email to user with valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub()
     const useCase = new SendEmailUseCase(mailOptions, mailServiceStub)
-    const response = await useCase.perform({
+    const user = User.create({
       name: toName,
       email: toEmail
-    })
-    expect(response).toBeInstanceOf(Right)
-  })
-
-  test('should not send email to user with invalid email address', async () => {
-    const mailServiceStub = new MailServiceStub()
-    const useCase = new SendEmailUseCase(mailOptions, mailServiceStub)
-    const response = await useCase.perform({
-      name: toName,
-      email: 'invalid_email'
-    })
-    expect(response).toBeInstanceOf(Left)
-    expect(response.value).toBeInstanceOf(InvalidEmailError)
+    }).value as User
+    const response = (await useCase.perform(user)).value as EmailOptions
+    expect(response.to).toBe(`${toName} <${toEmail}>`)
   })
 
   test('should return error when email service fails', async () => {
     const mailServiceWithErrorStub = new MailServiceWithErrorStub()
     const useCase = new SendEmailUseCase(mailOptions, mailServiceWithErrorStub)
-    const response = await useCase.perform({
+    const user = User.create({
       name: toName,
       email: toEmail
-    })
+    }).value as User
+    const response = await useCase.perform(user)
     expect(response.value).toBeInstanceOf(MailServiceError)
   })
 })
