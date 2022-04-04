@@ -1,6 +1,6 @@
 import { UserData } from '@/entities'
 import { HttpRequest, HttpResponse } from './ports'
-import { created, badRequest, serverError } from '@/web-controllers/utils/http-helper'
+import { ok, badRequest, serverError } from '@/web-controllers/utils/http-helper'
 import { MissingParamError } from './errors'
 import { UseCase } from '@/usecases/ports/use-case'
 
@@ -24,7 +24,7 @@ export class RegisterUserAndSendEmailController {
       if (response.isLeft()) {
         return badRequest(response.value)
       }
-      return created(response.value)
+      return ok(response.value)
     } catch (error) {
       return serverError(error)
     }
