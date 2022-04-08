@@ -4,7 +4,6 @@ import { MongoDbUserRepository } from '@/infra/repositories/mongodb'
 
 describe('MongoDB User Repository', () => {
   beforeAll(async () => {
-    console.log(process.env.MONGO_URL)
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
