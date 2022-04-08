@@ -4,7 +4,6 @@ import { MongoHelper } from '@/infra/repositories/mongodb/helpers'
 
 describe('Register route', () => {
   beforeAll(async () => {
-    console.log(process.env.MONGO_URL)
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
@@ -16,7 +15,7 @@ describe('Register route', () => {
     await MongoHelper.clearCollection('users')
   })
 
-  test('should return an account on sucess', async () => {
+  test('should return an account on success', async () => {
     app.post('/test_cors', (req, res) => {
       res.send()
     })
@@ -26,6 +25,6 @@ describe('Register route', () => {
         name: 'Any Name',
         email: 'anymail@mail.com'
       })
-      .expect(201)
-  })
+      .expect(200)
+  }, 20000)
 })
